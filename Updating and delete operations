@@ -1,0 +1,62 @@
+def update_customer(connection, customer_id, first_name,
+last_name, email, phone, address):
+try:
+cursor = connection.cursor()
+sql_update_query = """UPDATE customers SET
+first_name = %s, last_name = %s, email = %s, phone = %s,
+address = %s
+WHERE customer_id = %s"""
+values = (first_name, last_name, email, phone, address,
+customer_id)
+cursor.execute(sql_update_query, values)
+connection.commit()
+print(f"Customer {customer_id} updated successfully")
+except Error as e:
+print(f"Error updating customer: {e}")
+
+- Delete a Costumer
+
+def delete_customer(connection, customer_id):
+try:
+cursor = connection.cursor()
+
+sql_delete_query = "DELETE FROM customers
+WHERE customer_id = %s"
+cursor.execute(sql_delete_query, (customer_id,))
+connection.commit()
+print(f"Customer {customer_id} deleted
+successfully")
+except Error as e:
+print(f"Error deleting customer: {e}")
+
+- Update Product Information
+
+def update_product(connection, product_id,
+product_name, description, price, quantity_in_stock,
+category):
+try:
+cursor = connection.cursor()
+sql_update_query = """UPDATE products SET
+product_name = %s, description = %s, price = %s,
+quantity_in_stock = %s, category = %s
+WHERE product_id = %s"""
+values = (product_name, description, price,
+quantity_in_stock, category, product_id)
+cursor.execute(sql_update_query, values)
+connection.commit()
+print(f"Product {product_id} updated successfully")
+except Error as e:
+print(f"Error updating product: {e}")
+
+- Delete a Product
+
+def delete_product(connection, product_id):
+try:
+cursor = connection.cursor()
+sql_delete_query = "DELETE FROM products
+WHERE product_id = %s"
+cursor.execute(sql_delete_query, (product_id,))
+connection.commit()
+print(f"Product {product_id} deleted successfully")
+except Error as e:
+print(f"Error deleting product: {e}")
