@@ -1,0 +1,44 @@
+# Record a sale
+def add_sale(connection, customer_id, product_id,
+quantity_sold):
+try:
+cursor = connection.cursor()
+
+# Fetch the product price to calculate total sale price
+cursor.execute("SELECT price FROM products
+WHERE product_id = %s", (product_id,))
+price = cursor.fetchone()[0]
+total_price = price * quantity_sold
+
+sql_insert_query = """INSERT INTO sales
+(customer_id, product_id, quantity_sold, total_price)
+VALUES (%s, %s, %s, %s)"""
+values = (customer_id, product_id, quantity_sold,
+total_price)
+cursor.execute(sql_insert_query, values)
+connection.commit()
+print("Sale recorded successfully")
+except Error as e:
+print(f"Failed to insert sale: {e}")
+
+# View all sales
+def view_sales(connection):
+try:
+cursor = connection.cursor()
+query = """
+
+SELECT sales.sale_id, customers.first_name,
+customers.last_name, products.product_name,
+sales.quantity_sold, sales.total_price
+FROM sales
+INNER JOIN customers ON sales.customer_id =
+customers.customer_id
+INNER JOIN products ON sales.product_id =
+products.product_id
+"""
+cursor.execute(query)
+result = cursor.fetchall()
+for row in result:
+print(row)
+except Error as e:
+print(f"Error fetching sales: {e}")
