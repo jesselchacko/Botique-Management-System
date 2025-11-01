@@ -1,0 +1,25 @@
+# Add a new customer to the database
+def add_customer(connection, first_name, last_name, email,
+phone, address):
+try:
+cursor = connection.cursor()
+sql_insert_query = """INSERT INTO customers
+(first_name, last_name, email, phone, address)
+VALUES (%s, %s, %s, %s, %s)"""
+values = (first_name, last_name, email, phone, address)
+cursor.execute(sql_insert_query, values)
+connection.commit()
+print("Customer added successfully")
+except Error as e:
+print(f"Failed to insert customer: {e}")
+
+# View all customers
+def view_customers(connection):
+try:
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM customers")
+result = cursor.fetchall()
+for row in result:
+print(row)
+except Error as e:
+print(f"Error fetching customers: {e}")
