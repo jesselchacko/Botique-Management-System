@@ -1,0 +1,40 @@
+import csv
+
+def export_products_to_csv(connection,
+file_name='products.csv'):
+try:
+cursor = connection.cursor()
+
+cursor.execute("SELECT * FROM products")
+result = cursor.fetchall()
+# Write data to CSV
+with open(file_name, mode='w', newline='') as file:
+writer = csv.writer(file)
+writer.writerow([i[0] for i in cursor.description]) # Write
+header
+writer.writerows(result)
+print(f"Product data exported to {file_name}")
+except Error as e:
+print(f"Error exporting products: {e}")
+
+- Import Product Data from CSV
+
+def import_products_from_csv(connection,
+file_name='products.csv'):
+try:
+cursor = connection.cursor()
+with open(file_name, mode='r') as file:
+csv_reader = csv.reader(file)
+next(csv_reader) # Skip header row
+for row in csv_reader:
+sql_insert_query = """INSERT INTO products
+(product_name, description, price, quantity_in_stock,
+category)
+
+VALUES (%s, %s, %s, %s,
+%s)"""
+cursor.execute(sql_insert_query, row)
+connection.commit()
+print(f"Product data imported from {file_name}")
+except Error as e:
+print(f"Error importing products: {e}")
