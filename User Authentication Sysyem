@@ -1,0 +1,54 @@
+-- Table for storing user login details
+CREATE TABLE users (
+user_id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(50) NOT NULL UNIQUE,
+password VARCHAR(100) NOT NULL,
+role VARCHAR(20) NOT NULL, -- Roles like 'admin',
+'cashier', etc.
+created_at TIMESTAMP DEFAULT
+CURRENT_TIMESTAMP
+);
+
+- Python Code for User Authentication
+
+import hashlib
+
+# Function to hash passwords
+def hash_password(password):
+return hashlib.sha256(password.encode()).hexdigest()
+
+# Function to register a new user
+def register_user(connection, username, password, role):
+try:
+cursor = connection.cursor()
+
+hashed_password = hash_password(password)
+sql_insert_query = """INSERT INTO users
+(username, password, role)
+VALUES (%s, %s, %s)"""
+values = (username, hashed_password, role)
+cursor.execute(sql_insert_query, values)
+connection.commit()
+print("User registered successfully")
+except Error as e:
+print(f"Error registering user: {e}")
+
+# Function to authenticate a user login
+def login_user(connection, username, password):
+try:
+cursor = connection.cursor()
+hashed_password = hash_password(password)
+sql = "SELECT role FROM users WHERE username
+= %s AND password = %s"
+cursor.execute(sql, (username, hashed_password))
+result = cursor.fetchone()
+if result:
+print(f"Login successful. Role: {result[0]}")
+return result[0] # Return the role of the user (e.g.,
+'admin', 'cashier')
+else:
+print("Invalid username or password")
+return None
+except Error as e:
+
+print(f"Login error: {e}")
