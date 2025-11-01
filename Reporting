@@ -1,0 +1,49 @@
+def generate_sales_report(connection, start_date,
+end_date):
+try:
+cursor = connection.cursor()
+sql_query = """
+SELECT customers.first_name,
+customers.last_name, products.product_name,
+sales.quantity_sold, sales.total_price, sales.sale_date
+FROM sales
+
+INNER JOIN customers ON sales.customer_id =
+customers.customer_id
+INNER JOIN products ON sales.product_id =
+products.product_id
+WHERE sales.sale_date BETWEEN %s AND %s
+ORDER BY sales.sale_date DESC
+"""
+cursor.execute(sql_query, (start_date, end_date))
+result = cursor.fetchall()
+print("Sales Report")
+print("---------------------------------------------------")
+for row in result:
+print(f"Customer: {row[0]} {row[1]} | Product:
+{row[2]} | Quantity: {row[3]} | Total: {row[4]} | Date:
+{row[5]}")
+except Error as e:
+print(f"Error generating sales report: {e}")
+
+- Generate Low Inventory Report
+
+def generate_low_inventory_report(connection,
+threshold):
+try:
+cursor = connection.cursor()
+sql_query = """
+SELECT product_name, quantity_in_stock
+FROM products
+WHERE quantity_in_stock < %s
+
+"""
+cursor.execute(sql_query, (threshold,))
+result = cursor.fetchall()
+print("Low Inventory Report")
+print("---------------------------------------------------")
+for row in result:
+print(f"Product: {row[0]} | Stock Remaining:
+{row[1]}")
+except Error as e:
+print(f"Error generating low inventory report: {e}")
