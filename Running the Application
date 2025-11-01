@@ -1,0 +1,30 @@
+if __name__ == '__main__':
+# Establish the connection to the MySQL database
+conn = create_connection()
+
+# Example Usage:
+
+# 1. Add a customer
+add_customer(conn, "John", "Doe",
+"john.doe@example.com", "1234567890", "123 Main Street")
+
+# 2. Add a product
+add_product(conn, "Summer Dress", "A stylish summer
+dress", 59.99, 100, "Clothing")
+
+# 3. Add a sale
+add_sale(conn, 1, 1, 2) # Customer with ID 1 buys 2 units
+of product with ID 1
+
+# 4. View all customers
+view_customers(conn)
+
+# 5. View all products
+view_products(conn)
+
+# 6. View all sales
+view_sales(conn)
+
+# Close the connection
+
+conn.close()
